@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Map Creation</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col">
+                <h2>How Does it Work?</h2>
+                <p>With the help of our generator creating html imagemaps is free and easy. Simply start by selecting an
+                    image from your pc, or load one directly from an external website. Next up create your hot areas
+                    using either rectangle, circle or polygon shapes. Creating these shapes is as easy as pointing and
+                    clicking on your image. Don't forget to enter a link, title and target for each of them. Then once
+                    you're finished simply click Show Me The Code!</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col d-flex justify-content-center align-items-center gap-3 step">
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon3">Image Url</span>
+                    <input type="text" class="form-control" id="fileurl" aria-describedby="basic-addon3">
+                </div>
+                <button id="loadButWeb" class="btn btn-success btn-lg">Load Image from Web</button>
+                <button id="loadBut" class="btn btn-success btn-lg">Select Image from PC</button>
+                
+                
+            </div>
+        </div>
+
+    </div>
+    <div class="container mt-5" style="display: none;" id="work">
+        <div class="row">
+            <div class="col p-2 d-flex justify-content-center gap-3">
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Text</span>
+                    <input type="text" class="form-control" id="textinfo" aria-describedby="basic-addon1">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">Url</span>
+                    <input type="text" class="form-control" id="urlinfo" aria-describedby="basic-addon2">
+                </div>
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col p-2 d-flex justify-content-between">
+                <div>
+                    <button type="button" class="btn btn-primary active"  id="rect">
+                        <i class="bi bi-square"></i>
+                        Rect
+                    </button>
+                    <button type="button" class="btn btn-primary"  id="polygon">
+                        <i class="bi bi-hexagon"></i>
+                        Polygon
+                    </button>
+                    <button type="button" class="btn btn-primary"  id="circle">
+                        <i class="bi bi-circle"></i>
+                        Circle
+                    </button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" id="del">
+                        <i class="bi bi-trash3"></i>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col p-2 d-flex justify-content-center">
+                <svg style="max-width: 100%" id="main" xmlns="http://www.w3.org/2000/svg" class="border">
+
+                </svg>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col p-2 d-flex justify-content-center gap-1">
+                <button id="info" class="btn btn-success btn-lg">Create Code</button>
+                <button class="btn-copy btn btn-outline-primary" data-clipboard-target="#result" data-bs-toggle="tooltip" data-bs-placement="right" title="Copy to Clipboard">
+                    <i class="bi bi-clipboard2"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col p-2 d-flex justify-content-center">
+
+                <textarea cols="60" rows="10" id="result">
+
+            </textarea>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="/js/clipboard.min.js"></script>
+    <script>
+        var clipboard = new ClipboardJS('.btn-copy');
+    </script>
+
+    <script type="module" src="/main.js"></script>
+
+
+</body>
+
+</html>
