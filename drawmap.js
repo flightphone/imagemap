@@ -357,15 +357,24 @@ export function DrawMap(id) {
         localStorage.cnt = cnt;    
 
         let stylestr = `
-        <style>
-        .image-mapper-shape {
-            fill: rgba(0, 0, 0, 0);
-        }
-        .image-mapper-shape:hover {
-            stroke: white;
-            stroke-width: 4;
-        }
-        </style>
+<style>
+.image-mapper-shape {
+    fill: rgba(0, 0, 0, 0);
+}
+.image-mapper-shape:hover {
+    stroke: white;
+    stroke-width: 4;
+}
+.image-text {
+    font-family: Verdana;
+    font-size: 28px;
+    fill: rgba(0, 0, 0, 0);
+}
+
+g:hover .image-text {
+    fill: white;
+}
+</style>
         `
 
         let swidth = ` width = "${this.w}" `;
@@ -391,7 +400,14 @@ export function DrawMap(id) {
                 let url = (obj.url) ? obj.url : "#";
                 let astr = `<a xlink:href="${url}" target="_blank" xlink:title="${text}">`
                 result = result + "\n" + astr;
+                
+                result = result + "\n<g>";
                 result = result + "\n" + this.mSVG.children[i].outerHTML;
+                
+                let txttag = `<text class="image-text" x="${obj.points[0].x + 10}" y="${obj.points[0].y + 10}">${text}</text>`;
+                result = result + "\n" + txttag;
+                
+                result = result + "\n</g>"; 
                 result = result + "\n" + "</a>";
             }
         }
