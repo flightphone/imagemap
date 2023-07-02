@@ -361,7 +361,7 @@ export function DrawMap(id) {
 .image-mapper-shape {
     fill: rgba(0, 0, 0, 0);
 }
-.image-mapper-shape:hover {
+g:hover .image-mapper-shape {
     stroke: white;
     stroke-width: 4;
 }
