@@ -346,6 +346,54 @@ export function DrawMap(id) {
     });
 
     this.limit = 8 + 6 - 4;
+    this.generate2 = () => {
+        if (!localStorage.cnt)
+            localStorage.cnt = "0";
+
+        let cnt = parseInt(localStorage.cnt);
+        cnt += 1;
+        if (cnt > this.limit)
+            return "";
+        localStorage.cnt = cnt;
+
+        let result = `<img src="${this.fileurl}" usemap="#image-map">\n<map name="image-map">`;
+
+        for (let i = 0; i < this.mSVG.children.length; i++) {
+            if (this.mSVG.children[i].classList.contains("image-mapper-shape")) {
+                let ix = parseInt(this.mSVG.children[i].dataset.index);
+                let obj = this.objects.get(ix);
+                if (!obj)
+                    continue;
+                let text = (obj.text) ? obj.text : "";
+                let url = (obj.url) ? obj.url : "#";
+                let shape = "";
+                let coords = "";
+                let ftype = obj.ftype;
+                if (ftype == "rect") {
+                    shape = "rect";
+                    coords = `${Math.round(obj.points[0].x)},${Math.round(obj.points[0].y)},${Math.round(obj.points[1].x)},${Math.round(obj.points[1].y)}`;
+                }
+                if (ftype == "circle") {
+                    shape = "circle";
+                    let x = parseInt(obj.element.getAttribute("cx"));
+                    let y = parseInt(obj.element.getAttribute("cy"));
+                    let r = parseInt(obj.element.getAttribute("r"));
+                    coords = `${x},${y},${r}`;
+                }
+                if (ftype == "polygon") {
+                    shape = "poly"
+                    coords = `${Math.round(obj.points[0].x)},${Math.round(obj.points[0].y)}`;
+                    for (let i = 1; i < obj.points.length; i++)
+                        coords = coords + `,${Math.round(obj.points[i].x)},${Math.round(obj.points[i].y)}`;
+                }
+                let area = `    <area target="_blank" alt="${text}" title="${text}" href="${url}" coords="${coords}" shape="${shape}"></area>`;
+                result = result + "\n" + area
+            }
+        }
+        result = result + "\n</map>";
+        return result;
+    }
+
     this.generate = () => {
         if (!localStorage.cnt)
             localStorage.cnt = "0";
@@ -354,7 +402,7 @@ export function DrawMap(id) {
         cnt += 1;
         if (cnt > this.limit)
             return "";
-        localStorage.cnt = cnt;    
+        localStorage.cnt = cnt;
 
         let stylestr = `
 <style>
@@ -367,7 +415,7 @@ g:hover .image-mapper-shape {
 }
 .image-text {
     font-family: Verdana;
-    font-size: 28px;
+    font-size: 22px;
     fill: rgba(0, 0, 0, 0);
 }
 
@@ -381,7 +429,7 @@ g:hover .image-text {
         if (this.w > 1200)
             swidth = ` style="width:90%" `;
         let vb = this.mSVG.getAttribute("viewBox");
-        let stsvg = `<svg ${swidth} xmlns="http://www.w3.org/2000/svg" viewBox="${vb}">`;
+        let stsvg = `<svg ${swidth} xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="${vb}">`;
         let result = stsvg + stylestr;
 
         let simg = this.image.outerHTML;
@@ -400,20 +448,21 @@ g:hover .image-text {
                 let url = (obj.url) ? obj.url : "#";
                 let astr = `<a xlink:href="${url}" target="_blank" xlink:title="${text}">`
                 result = result + "\n" + astr;
-                
+
                 result = result + "\n<g>";
                 result = result + "\n" + this.mSVG.children[i].outerHTML;
-                
-                let txttag = `<text class="image-text" x="${obj.points[0].x + 10}" y="${obj.points[0].y + 10}">${text}</text>`;
+
+                let txttag = `<text class="image-text" x="${obj.points[0].x}" y="${obj.points[0].y}">${text}</text>`;
                 result = result + "\n" + txttag;
-                
-                result = result + "\n</g>"; 
+
+                result = result + "\n</g>";
                 result = result + "\n" + "</a>";
             }
         }
         result = result + "\n" + "</svg>";
         return result;
     }
+
 
     window.addEventListener("mouseup", (e) => {
         if (this.isDrawing) {

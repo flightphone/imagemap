@@ -75,8 +75,20 @@ infoBut.addEventListener("click", () => {
         obj.text = textinfo.value;
         obj.url = urlinfo.value;
     }
+    document.getElementById("result").value = dm.generate2();
+});
+
+const infoSVG = document.getElementById("infoSVG");
+infoSVG.addEventListener("click", () => {
+    let obj = dm.objects.get(dm.active);
+    if (obj) {
+        obj.text = textinfo.value;
+        obj.url = urlinfo.value;
+    }
     document.getElementById("result").value = dm.generate();
 });
+
+
 
 
 dm.onDeactive = (obj) => {
