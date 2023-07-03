@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5" id="main_block">
         <div class="row">
             <div class="col">
                 <h2>How Does it Work?</h2>
@@ -39,13 +39,23 @@
             <div class="col p-2 d-flex justify-content-center gap-3">
 
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">Text</span>
+                    <span class="input-group-text" id="basic-addon1">Title</span>
                     <input type="text" class="form-control" id="textinfo" aria-describedby="basic-addon1">
                 </div>
 
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon2">Url</span>
+                    <span class="input-group-text" id="basic-addon2">Link</span>
                     <input type="text" class="form-control" id="urlinfo" aria-describedby="basic-addon2">
+                </div>
+                <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon5">Target</span>    
+                <select class="form-select" aria-describedby="basic-addon5" id="targetinfo">
+                    <option selected>---</option>
+                    <option value="_blank">_blank</option>
+                    <option value="_parent">_parent</option>
+                    <option value="_self">_self</option>
+                    <option value="_self">_top</option>
+                  </select>
                 </div>
 
 
@@ -77,7 +87,7 @@
         </div>
         <div class="row">
             <div class="col p-2 d-flex justify-content-center">
-                <svg style="max-width: 100%" id="main" xmlns="http://www.w3.org/2000/svg" class="border">
+                <svg id="main" xmlns="http://www.w3.org/2000/svg" class="border">
 
                 </svg>
             </div>

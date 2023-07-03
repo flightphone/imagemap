@@ -34,17 +34,27 @@ export function DrawMap(id) {
 
     }
 
+    this.setsize = () => {
+        let winnerWidth = document.getElementById("main_block").clientWidth;
+        let w = Math.min(this.w, winnerWidth  * 0.9);
+        this.mSVG.setAttribute("width", `${w}px`);
+    }
+    window.addEventListener('resize', () => {
+        this.setsize();
+      }, true);
+      
+
     this.buferImage.addEventListener("load", (e) => {
+        
         this.mSVG.innerHTML = "";
         this.w = this.buferImage.width;
         this.h = this.buferImage.height;
         this.image.style.width = `${this.w}px`;
         let vb = `0 0 ${this.w} ${this.h}`;
         this.mSVG.setAttribute("viewBox", vb);
-        if (this.w < window.innerWidth * 0.8)
-            this.mSVG.setAttribute("width", `${this.w}px`);
-        else
-            this.mSVG.removeAttribute("width");
+        
+        this.setsize();
+        
         this.mSVG.appendChild(this.image);
         //init svg
         this.isDrawing = false;
@@ -345,16 +355,16 @@ export function DrawMap(id) {
         }
     });
 
-    this.limit = 8 + 6 - 4;
+    this.limit = 18 + 6 - 4;
     this.generate2 = () => {
-        if (!localStorage.cnt)
-            localStorage.cnt = "0";
+        // if (!localStorage.cnt)
+        //     localStorage.cnt = "0";
 
-        let cnt = parseInt(localStorage.cnt);
-        cnt += 1;
-        if (cnt > this.limit)
-            return "";
-        localStorage.cnt = cnt;
+        // let cnt = parseInt(localStorage.cnt);
+        // cnt += 1;
+        // if (cnt > this.limit)
+        //     return "";
+        // localStorage.cnt = cnt;
 
         let result = `<img src="${this.fileurl}" usemap="#image-map">\n<map name="image-map">`;
 
@@ -366,6 +376,9 @@ export function DrawMap(id) {
                     continue;
                 let text = (obj.text) ? obj.text : "";
                 let url = (obj.url) ? obj.url : "#";
+                let target = (obj.target) ? obj.target : "";
+                if (target == "---")
+                    target = "";
                 let shape = "";
                 let coords = "";
                 let ftype = obj.ftype;
@@ -386,7 +399,9 @@ export function DrawMap(id) {
                     for (let i = 1; i < obj.points.length; i++)
                         coords = coords + `,${Math.round(obj.points[i].x)},${Math.round(obj.points[i].y)}`;
                 }
-                let area = `    <area target="_blank" alt="${text}" title="${text}" href="${url}" coords="${coords}" shape="${shape}"></area>`;
+                
+                
+                let area = `    <area target="${target}" alt="${text}" title="${text}" href="${url}" coords="${coords}" shape="${shape}"></area>`;
                 result = result + "\n" + area
             }
         }
@@ -395,14 +410,14 @@ export function DrawMap(id) {
     }
 
     this.generate = () => {
-        if (!localStorage.cnt)
-            localStorage.cnt = "0";
+        // if (!localStorage.cnt)
+        //     localStorage.cnt = "0";
 
-        let cnt = parseInt(localStorage.cnt);
-        cnt += 1;
-        if (cnt > this.limit)
-            return "";
-        localStorage.cnt = cnt;
+        // let cnt = parseInt(localStorage.cnt);
+        // cnt += 1;
+        // if (cnt > this.limit)
+        //     return "";
+        // localStorage.cnt = cnt;
 
         let stylestr = `
 <style>
@@ -427,7 +442,7 @@ g:hover .image-text {
 
         let swidth = ` width = "${this.w}" `;
         if (this.w > 1200)
-            swidth = ` style="width:90%" `;
+            swidth = ` style="width:100%" `;
         let vb = this.mSVG.getAttribute("viewBox");
         let stsvg = `<svg ${swidth} xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="${vb}">`;
         let result = stsvg + stylestr;
@@ -446,7 +461,9 @@ g:hover .image-text {
                     continue;
                 let text = (obj.text) ? obj.text : "";
                 let url = (obj.url) ? obj.url : "#";
-                let astr = `<a xlink:href="${url}" target="_blank" xlink:title="${text}">`
+                let target = (obj.target) ? obj.target : "";
+
+                let astr = `<a xlink:href="${url}" target="${target}" xlink:title="${text}">`
                 result = result + "\n" + astr;
 
                 result = result + "\n<g>";

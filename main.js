@@ -18,6 +18,7 @@ dm.onLoad = () => {
 
 const textinfo = document.getElementById("textinfo");
 const urlinfo = document.getElementById("urlinfo");
+const targetinfo = document.getElementById("targetinfo");
 
 const loadBut = document.getElementById("loadBut");
 loadBut.addEventListener("click", () => {
@@ -74,6 +75,7 @@ infoBut.addEventListener("click", () => {
     if (obj) {
         obj.text = textinfo.value;
         obj.url = urlinfo.value;
+        obj.target = targetinfo.value;
     }
     document.getElementById("result").value = dm.generate2();
 });
@@ -84,6 +86,7 @@ infoSVG.addEventListener("click", () => {
     if (obj) {
         obj.text = textinfo.value;
         obj.url = urlinfo.value;
+        obj.target = targetinfo.value;
     }
     document.getElementById("result").value = dm.generate();
 });
@@ -94,10 +97,12 @@ infoSVG.addEventListener("click", () => {
 dm.onDeactive = (obj) => {
     obj.text = textinfo.value;
     obj.url = urlinfo.value;
+    obj.target = targetinfo.value;
 }
 
 dm.onActive = (obj) => {
     textinfo.value = (obj.text) ? obj.text : "";
     urlinfo.value = (obj.url) ? obj.url : "#";
+    targetinfo.value = (obj.target)? obj.target : "---";
 }
 
