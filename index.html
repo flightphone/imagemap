@@ -21,58 +21,65 @@
             </div>
         </div>
         <div class="row">
-            <div class="col d-flex justify-content-center align-items-center gap-3 step">
+            <div class="col d-flex justify-content-center align-items-center gap-3 flex-wrap step">
+
                 <div class="input-group">
                     <span class="input-group-text" id="basic-addon3">Image Url</span>
                     <input type="text" class="form-control" id="fileurl" aria-describedby="basic-addon3">
                 </div>
+
                 <button id="loadButWeb" class="btn btn-success btn-lg">Load Image from Web</button>
                 <button id="loadBut" class="btn btn-success btn-lg">Select Image from PC</button>
-                
-                
+
+
+
             </div>
         </div>
 
     </div>
     <div class="container mt-5" style="display: none;" id="work">
         <div class="row">
-            <div class="col p-2 d-flex justify-content-center gap-3">
-
+            <!-- <div class="col p-2 d-flex justify-content-center gap-3"> -->
+            <div class="col-lg-4 col-sm-12">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1">Title</span>
                     <input type="text" class="form-control" id="textinfo" aria-describedby="basic-addon1">
                 </div>
-
+            </div>
+            <div class="col-lg-4 col-sm-12">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon2">Link</span>
                     <input type="text" class="form-control" id="urlinfo" aria-describedby="basic-addon2">
                 </div>
-                <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon5">Target</span>    
-                <select class="form-select" aria-describedby="basic-addon5" id="targetinfo">
-                    <option selected>---</option>
-                    <option value="_blank">_blank</option>
-                    <option value="_parent">_parent</option>
-                    <option value="_self">_self</option>
-                    <option value="_self">_top</option>
-                  </select>
-                </div>
-
-
             </div>
+            <div class="col-lg-4 col-sm-12">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon5">Target</span>
+                    <select class="form-select" aria-describedby="basic-addon5" id="targetinfo">
+                        <option selected>---</option>
+                        <option value="_blank">_blank</option>
+                        <option value="_parent">_parent</option>
+                        <option value="_self">_self</option>
+                        <option value="_self">_top</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <!-- </div> -->
         </div>
         <div class="row">
             <div class="col p-2 d-flex justify-content-between">
                 <div>
-                    <button type="button" class="btn btn-primary active"  id="rect">
+                    <button type="button" class="btn btn-primary active" id="rect">
                         <i class="bi bi-square"></i>
                         Rect
                     </button>
-                    <button type="button" class="btn btn-primary"  id="polygon">
+                    <button type="button" class="btn btn-primary" id="polygon">
                         <i class="bi bi-hexagon"></i>
                         Polygon
                     </button>
-                    <button type="button" class="btn btn-primary"  id="circle">
+                    <button type="button" class="btn btn-primary" id="circle">
                         <i class="bi bi-circle"></i>
                         Circle
                     </button>
@@ -96,7 +103,8 @@
             <div class="col p-2 d-flex justify-content-center gap-1">
                 <button id="info" class="btn btn-success btn-lg">Create Map</button>
                 <button id="infoSVG" class="btn btn-success btn-lg">Create SVG</button>
-                <button class="btn-copy btn btn-outline-primary" data-clipboard-target="#result" data-bs-toggle="tooltip" data-bs-placement="right" title="Copy to Clipboard">
+                <button class="btn-copy btn btn-outline-primary" data-clipboard-target="#result"
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="Copy to Clipboard">
                     <i class="bi bi-clipboard2"></i>
                 </button>
             </div>

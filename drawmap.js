@@ -8,7 +8,7 @@ export function DrawMap(id) {
     this.active = 0;
     this.activepoint = -1;
     this.SVGwidth = 1000;
-    this.r = 6;
+    this.r = 9;
 
     this.x = 0;
     this.y = 0;
@@ -320,43 +320,7 @@ export function DrawMap(id) {
         return ((x * this.w) / this.mSVG.width.baseVal.value);
     }
 
-    this.mSVG.addEventListener("mousedown", (e) => {
-        this.x = this.scale(e.offsetX);
-        this.y = this.scale(e.offsetY);
 
-
-        if (e.target.dataset.index) {
-            let active = parseInt(e.target.dataset.index);
-            //edit figure
-            if (this.action == "edit") {
-                if (this.active == active) {
-                    this.action = "add";
-                }
-                else
-                    return;
-            }
-
-            if (active != this.active) {
-                this.deactivate(this.active)
-                this.active = active;
-                this.activate(this.active);
-            }
-            this.active = active;
-
-
-            if (e.target.dataset.point != null)
-                this.activepoint = parseInt(e.target.dataset.point)
-            else {
-                e.target.classList.add("image-move");
-                this.activepoint = -1;
-            }
-            this.isDrawing = true;
-
-        }
-        else {
-            this.click(this.x, this.y);
-        }
-    });
 
     this.limit = 18 + 6 - 4;
     this.generate2 = () => {
@@ -499,6 +463,43 @@ g:hover .image-text {
         }
     });
 
+    this.mSVG.addEventListener("mousedown", (e) => {
+        this.x = this.scale(e.offsetX);
+        this.y = this.scale(e.offsetY);
+
+
+        if (e.target.dataset.index) {
+            let active = parseInt(e.target.dataset.index);
+            //edit figure
+            if (this.action == "edit") {
+                if (this.active == active) {
+                    this.action = "add";
+                }
+                else
+                    return;
+            }
+
+            if (active != this.active) {
+                this.deactivate(this.active)
+                this.active = active;
+                this.activate(this.active);
+            }
+            this.active = active;
+
+
+            if (e.target.dataset.point != null)
+                this.activepoint = parseInt(e.target.dataset.point)
+            else {
+                e.target.classList.add("image-move");
+                this.activepoint = -1;
+            }
+            this.isDrawing = true;
+
+        }
+        else {
+            this.click(this.x, this.y);
+        }
+    });
 
     this.mSVG.addEventListener("mousemove", (e) => {
         if (this.isDrawing) {
@@ -511,23 +512,51 @@ g:hover .image-text {
     });
 
     this.mSVG.addEventListener("touchmove", (e) => {
-        if (this.active == 0)
+        if (!this.isDrawing)
+            return
+        
+        if (this.active_to == 0)
             return;
+        
+        e.preventDefault();
         const touches = e.changedTouches;
-
-        this.move(this.active, this.activepoint, this.scale(touches[0].pageX) - this.x, this.scale(touches[0].pageY) - this.y);
+        this.move(this.active_to, this.activepoint_to, this.scale(touches[0].pageX) - this.x, this.scale(touches[0].pageY) - this.y);
         this.x = this.scale(touches[0].pageX);
         this.y = this.scale(touches[0].pageY);
-        this.render(this.active);
+        this.render(this.active_to);
+        
     });
 
     this.mSVG.addEventListener("touchstart", (e) => {
-        if (this.active == 0)
+        if (e.target.dataset.index == null)
+        {
+            this.active_to = 0;
+            this.activepoint_to = -1;
             return;
+        }
+        this.active_to = parseInt(e.target.dataset.index);
+        if (e.target.dataset.point == null)
+            this.activepoint_to = -1;
+        else
+            this.activepoint_to = parseInt(e.target.dataset.point);
+        this.isDrawing = true;    
         const touches = e.changedTouches;
         this.x = this.scale(touches[0].pageX);
         this.y = this.scale(touches[0].pageY);
+        //console.log(e.target);
         //this.render(this.active);
     });
+
+    this.mSVG.addEventListener("touchend", (e) => {
+        if (this.isDrawing) {
+            this.active_to = 0;
+            this.activepoint_to = -1;
+            this.x = 0;
+            this.y = 0;
+            this.isDrawing = false;
+        }
+    });
+
+    
 
 }
