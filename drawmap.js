@@ -8,7 +8,7 @@ export function DrawMap(id) {
     this.active = 0;
     this.activepoint = -1;
     this.SVGwidth = 1000;
-    this.r = 9;
+    this.r = 10;
 
     this.x = 0;
     this.y = 0;
@@ -471,6 +471,7 @@ g:hover .image-text {
         if (e.target.dataset.index) {
             let active = parseInt(e.target.dataset.index);
             //edit figure
+            /*
             if (this.action == "edit") {
                 if (this.active == active) {
                     this.action = "add";
@@ -478,13 +479,21 @@ g:hover .image-text {
                 else
                     return;
             }
-
+            */
+            this.action = "add";
             if (active != this.active) {
                 this.deactivate(this.active)
                 this.active = active;
                 this.activate(this.active);
             }
             this.active = active;
+            let obj = this.objects.get(this.active);
+            if (obj.ftype == "polygon")
+            {
+                this.action = "edit";
+            }
+            else 
+                this.action == "add";   
 
 
             if (e.target.dataset.point != null)

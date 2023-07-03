@@ -26,8 +26,8 @@
 
 
 .selected {
-    stroke: blue;
-    stroke-width: 2;
+    stroke: red;
+    stroke-width: 3;
 }
 
 .hide-point {
