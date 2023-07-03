@@ -7,6 +7,8 @@ export function DrawMap(id) {
     this.n = 0;
     this.active = 0;
     this.activepoint = -1;
+    this.SVGwidth = 1000;
+    this.r = 6;
 
     this.x = 0;
     this.y = 0;
@@ -38,6 +40,7 @@ export function DrawMap(id) {
         let winnerWidth = document.getElementById("main_block").clientWidth;
         let w = Math.min(this.w, winnerWidth  * 0.9);
         this.mSVG.setAttribute("width", `${w}px`);
+        return w;
     }
     window.addEventListener('resize', () => {
         this.setsize();
@@ -53,7 +56,7 @@ export function DrawMap(id) {
         let vb = `0 0 ${this.w} ${this.h}`;
         this.mSVG.setAttribute("viewBox", vb);
         
-        this.setsize();
+        this.SVGwidth = this.setsize();
         
         this.mSVG.appendChild(this.image);
         //init svg
@@ -79,7 +82,7 @@ export function DrawMap(id) {
         let p = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         p.setAttribute("cx", x);
         p.setAttribute("cy", y);
-        p.setAttribute("r", 5);
+        p.setAttribute("r", this.r * this.w / this.SVGwidth);
         p.setAttribute("class", "image-mapper-point");
         p.setAttribute("data-index", this.active);
         p.setAttribute("data-point", 0);
@@ -118,7 +121,7 @@ export function DrawMap(id) {
         let p = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         p.setAttribute("cx", x);
         p.setAttribute("cy", y);
-        p.setAttribute("r", 5);
+        p.setAttribute("r", this.r * this.w / this.SVGwidth);
         p.setAttribute("class", "image-mapper-point");
         p.setAttribute("data-index", this.active);
         p.setAttribute("data-point", obj.points.length);
