@@ -8,7 +8,7 @@ export function DrawMap(id) {
     this.active = 0;
     this.activepoint = -1;
     this.SVGwidth = 1000;
-    this.r = 10;
+    this.r = 9;
 
     this.x = 0;
     this.y = 0;
