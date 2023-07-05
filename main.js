@@ -36,11 +36,31 @@ loadButWeb.addEventListener("click", () => {
 const delBut = document.getElementById("del");
 delBut.addEventListener("click", () => {
     dm.delete();
+    textinfo.value = "";
+    urlinfo.value = "";
+    targetinfo.value = "---";
 
 });
 
+const applyBut = document.getElementById("apply");
+applyBut.addEventListener("click", () => {
+    if (dm.active > 0)
+    {
+        dm.deactivate(dm.active);
+        dm.active = 0;
+    }
+    dm.action = "add";
+});
+
+
+
 const circleBut = document.getElementById("circle");
 circleBut.addEventListener("click", () => {
+    if (dm.active > 0)
+    {
+        dm.deactivate(dm.active);
+        dm.active = 0;
+    }
     dm.action = "add";
     dm.mode = "circle";
     circleBut.classList.add("active");
@@ -52,6 +72,11 @@ circleBut.addEventListener("click", () => {
 
 const rectBut = document.getElementById("rect");
 rectBut.addEventListener("click", () => {
+    if (dm.active > 0)
+    {
+        dm.deactivate(dm.active);
+        dm.active = 0;
+    }
     dm.action = "add";
     dm.mode = "rect";
     rectBut.classList.add("active");
@@ -62,6 +87,11 @@ rectBut.addEventListener("click", () => {
 
 const polygonBut = document.getElementById("polygon");
 polygonBut.addEventListener("click", () => {
+    if (dm.active > 0)
+    {
+        dm.deactivate(dm.active);
+        dm.active = 0;
+    }
     dm.action = "add";
     dm.mode = "polygon";
     polygonBut.classList.add("active");
@@ -77,6 +107,7 @@ infoBut.addEventListener("click", () => {
         obj.url = urlinfo.value;
         obj.target = targetinfo.value;
     }
+    //document.getElementById("result").value = "aa";
     document.getElementById("result").value = dm.generate2();
 });
 
@@ -98,6 +129,9 @@ dm.onDeactive = (obj) => {
     obj.text = textinfo.value;
     obj.url = urlinfo.value;
     obj.target = targetinfo.value;
+    textinfo.value = "";
+    urlinfo.value = "";
+    targetinfo.value = "---";
 }
 
 dm.onActive = (obj) => {

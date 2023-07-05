@@ -69,8 +69,9 @@
             <!-- </div> -->
         </div>
         <div class="row">
-            <div class="col p-2 d-flex justify-content-between">
-                <div>
+            <!-- d-flex justify-content-between flex-wrap  <div class="col p-2"> -->
+           
+                <div class="col-lg-8 col-sm-12 mb-2 d-flex justify-content-lg-start justify-content-between gap-2">
                     <button type="button" class="btn btn-primary active" id="rect">
                         <i class="bi bi-square"></i>
                         Rect
@@ -84,13 +85,16 @@
                         Circle
                     </button>
                 </div>
-                <div>
+                <div class="col-lg-4 col-sm-12 mb-2 d-flex justify-content-lg-end justify-content-center gap-2">
+                    <button type="button" class="btn btn-primary" id="apply">
+                        <i class="bi bi-check2"></i>
+                        Apply
+                    </button>
                     <button type="button" class="btn btn-primary" id="del">
                         <i class="bi bi-trash3"></i>
                         Delete
                     </button>
                 </div>
-            </div>
         </div>
         <div class="row">
             <div class="col p-2 d-flex justify-content-center">
@@ -102,7 +106,7 @@
         <div class="row">
             <div class="col p-2 d-flex justify-content-center gap-1">
                 <button id="info" class="btn btn-success btn-lg">Create Map</button>
-                <button id="infoSVG" class="btn btn-success btn-lg">Create SVG</button>
+                <button id="infoSVG" class="btn btn-success btn-lg" style="display:none">Create SVG</button>
                 <button class="btn-copy btn btn-outline-primary" data-clipboard-target="#result"
                     data-bs-toggle="tooltip" data-bs-placement="right" title="Copy to Clipboard">
                     <i class="bi bi-clipboard2"></i>
