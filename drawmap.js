@@ -483,26 +483,7 @@ g:hover .image-text {
             if (e.target.dataset.point != null)
                 point = parseInt(e.target.dataset.point);
 
-            // if (this.active == active && this.activepoint == point && point > -1) {
-            //     let ob = this.objects.get(this.active);
-            //     if (ob.ftype == "polygon") {
-            //         if (ob.points.length > 3) {
-            //             ob.points.splice(point, 1);
-            //             ob.circles[point].setAttribute("class", "hide-point");
-            //             ob.circles.splice(point, 1);
-            //             ob.polygon.splice(point, 1);
-
-
-            //             let poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-            //             poly.setAttribute("class", "image-mapper-shape");
-            //             poly.setAttribute("data-index", this.active);
-            //             ob.element = poly;
-
-            //             for (let i = 0; i < ob.polygon.length; i++)
-            //                 poly.points.appendItem(ob.polygon[i]);
-            //         }
-            //     }
-            // }
+    
 
             this.action = "add";
             if (active != this.active) {
