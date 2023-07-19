@@ -92,6 +92,7 @@ export function DrawMap(id) {
             points: [{ x: x, y: y }],
             circles: [p]
         }
+
         if (this.mode == "polygon") {
             //create polygon
             let poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
@@ -102,7 +103,7 @@ export function DrawMap(id) {
             let poi = this.mSVG.createSVGPoint();
             poi.x = x;
             poi.y = y;
-            obj.polygon = [poi];
+            //obj.polygon = [poi];
             poly.points.appendItem(poi);
             this.mSVG.appendChild(poly);
 
@@ -147,6 +148,11 @@ export function DrawMap(id) {
         }
 
         this.activate(this.active);
+        if (ftype == "polygon")
+        { 
+            let n = obj.points.length;
+            this.activatePoint(obj, n-1);
+        }
     };
 
     this.deactivate = (active) => {
@@ -164,6 +170,13 @@ export function DrawMap(id) {
 
     }
 
+    this.activatePoint = (obj, point) => {
+        for (let i = 0; i < obj.circles.length; i++) {
+            obj.circles[i].setAttribute("class", "image-mapper-point");
+        }
+        obj.circles[point].setAttribute("class", "image-mapper-activepoint");
+    }
+
     this.activate = (active) => {
         let obj = this.objects.get(active);
         if (!obj)
@@ -174,8 +187,79 @@ export function DrawMap(id) {
         if (!obj.element)
             return;
         obj.element.classList.add("selected");
+
+
+
         if (this.onActive)
             this.onActive(obj);
+    }
+
+
+    this.removePreview = () => {
+        if (this.preview)
+            this.mSVG.removeChild(this.preview);
+        this.preview = null;
+    }
+    this.addPreview = (p) => {
+        this.preview = p;
+        this.mSVG.appendChild(this.preview);
+    }
+    this.showPreview = (x, y) => {
+        let obj = this.objects.get(this.active);
+        if (!obj)
+            return;
+        if (obj.ftype == "rect")
+            this.showPreviewRect(obj, x, y);
+        if (obj.ftype == "circle")
+            this.showPreviewCircle(obj, x, y);
+        if (obj.ftype == "polygon")
+            this.showPreviewPolygon(obj, x, y);
+
+    }
+
+    this.showPreviewCircle = (obj, x, y) => {
+        let r = (obj.points[0].x - x) * (obj.points[0].x - x) +
+            (obj.points[0].y - y) * (obj.points[0].y - y);
+        r = Math.sqrt(r);
+        let p = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        p.setAttribute("cx", obj.points[0].x);
+        p.setAttribute("cy", obj.points[0].y);
+        p.setAttribute("r", r);
+        p.setAttribute("class", "image-mapper-shape selected");
+        this.removePreview();
+        this.addPreview(p);
+    }
+
+    this.showPreviewPolygon = (obj, x, y) => {
+        let p = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+        p.setAttribute("class", "image-mapper-shape selected");
+        let n = obj.points.length;
+        let points = [obj.points[n - 1], { x: x, y: y }, obj.points[0]];
+        for (let e of points) {
+            let poi = this.mSVG.createSVGPoint();
+            poi.x = e.x;
+            poi.y = e.y;
+            p.points.appendItem(poi);
+        }
+        this.removePreview();
+        this.addPreview(p);
+    }
+
+
+    this.showPreviewRect = (obj, xx, yy) => {
+        let x1 = Math.min(obj.points[0].x, xx);
+        let x2 = Math.max(obj.points[0].x, xx);
+        let y1 = Math.min(obj.points[0].y, yy);
+        let y2 = Math.max(obj.points[0].y, yy);
+        let p = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        p.setAttribute("x", x1);
+        p.setAttribute("y", y1);
+        p.setAttribute("width", (x2 - x1));
+        p.setAttribute("height", (y2 - y1));
+        p.setAttribute("class", "image-mapper-shape selected");
+        this.removePreview();
+        this.addPreview(p);
+
     }
 
     this.createRect = (obj) => {
@@ -194,7 +278,7 @@ export function DrawMap(id) {
         this.mSVG.appendChild(p);
         this.mSVG.appendChild(obj.circles[0]);
         this.mSVG.appendChild(obj.circles[1]);
-        
+
     }
 
     this.createCircle = (obj) => {
@@ -220,9 +304,7 @@ export function DrawMap(id) {
         let poi = this.mSVG.createSVGPoint();
         poi.x = obj.points[n - 1].x;
         poi.y = obj.points[n - 1].y;
-        obj.polygon.push(poi);
         obj.element.points.appendItem(poi);
-
     }
 
 
@@ -294,9 +376,8 @@ export function DrawMap(id) {
 
     this.renderPolygon = (obj) => {
         for (let i = 0; i < obj.points.length; i++) {
-            let a = obj.polygon[i];
-            a.x = obj.points[i].x;
-            a.y = obj.points[i].y;
+            obj.element.points[i].x = obj.points[i].x;
+            obj.element.points[i].y = obj.points[i].y;
         }
     };
 
@@ -309,7 +390,29 @@ export function DrawMap(id) {
 
 
     this.delete = () => {
+        this.removePreview();
         let obj = this.objects.get(this.active);
+        if (obj.ftype == "polygon") {
+            for (let i = 0; i < obj.circles.length; i++) {
+                if (obj.circles[i].getAttribute("class") == "image-mapper-activepoint") {
+
+                    this.mSVG.removeChild(obj.circles[i]);
+                    obj.circles.splice(i, 1);
+                    obj.points.splice(i, 1);
+                    //obj.polygon.splice(i,1);
+                    obj.element.points.clear();
+                    for (let j = 0; j < obj.circles.length; j++) {
+                        obj.circles[j].setAttribute("data-point", j);
+                        let poi = this.mSVG.createSVGPoint();
+                        poi.x = obj.points[j].x;
+                        poi.y = obj.points[j].y;
+                        obj.element.points.appendItem(poi);
+                    }
+
+                    return;
+                }
+            }
+        }
         this.active = 0;
         this.action = "add";
         if (!obj)
@@ -329,17 +432,8 @@ export function DrawMap(id) {
 
 
 
-    this.limit = 18 + 6 - 4;
+
     this.generate2 = () => {
-        // if (!localStorage.cnt)
-        //     localStorage.cnt = "0";
-
-        // let cnt = parseInt(localStorage.cnt);
-        // cnt += 1;
-        // if (cnt > this.limit)
-        //     return "";
-        // localStorage.cnt = cnt;
-
         let result = `<!-- Image Map Generated by https://www.fla-shop.com/image-map/ -->
 <img src="${this.fileurl}" usemap="#image-map">
 <map name="image-map">`;
@@ -386,14 +480,6 @@ export function DrawMap(id) {
     }
 
     this.generate = () => {
-        // if (!localStorage.cnt)
-        //     localStorage.cnt = "0";
-
-        // let cnt = parseInt(localStorage.cnt);
-        // cnt += 1;
-        // if (cnt > this.limit)
-        //     return "";
-        // localStorage.cnt = cnt;
 
         let stylestr = `
 <style>
@@ -473,9 +559,12 @@ g:hover .image-text {
     });
 
     this.mSVG.addEventListener("mousedown", (e) => {
+
+
         this.x = this.scale(e.offsetX);
         this.y = this.scale(e.offsetY);
 
+        this.removePreview();
 
         if (e.target.dataset.index) {
             let active = parseInt(e.target.dataset.index);
@@ -483,7 +572,6 @@ g:hover .image-text {
             if (e.target.dataset.point != null)
                 point = parseInt(e.target.dataset.point);
 
-    
 
             this.action = "add";
             if (active != this.active) {
@@ -500,8 +588,11 @@ g:hover .image-text {
                 this.action == "add";
 
 
-            if (e.target.dataset.point != null)
+            if (e.target.dataset.point != null) {
                 this.activepoint = point;
+                if (obj.ftype == "polygon")
+                    this.activatePoint(obj, point);
+            }
             else {
                 e.target.classList.add("image-move");
                 this.activepoint = -1;
@@ -520,6 +611,19 @@ g:hover .image-text {
             this.x = this.scale(e.offsetX);
             this.y = this.scale(e.offsetY);
             this.render(this.active);
+        } else {
+
+            if (this.action == "edit" && this.active > 0) {
+                let x = this.scale(e.offsetX);
+                let y = this.scale(e.offsetY);
+                if (e.target.dataset.index || e.target.dataset.point)
+                    this.removePreview();
+                else    
+                    this.showPreview(x, y);
+            }
+
+
+
         }
 
     });

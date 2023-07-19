@@ -16,6 +16,18 @@ dm.onLoad = () => {
 
 }
 
+
+document.body.addEventListener("mousemove", (e) => {
+    if (e.target.tagName == "image")
+    {
+        return;
+    }
+    else
+    {   
+        dm.removePreview();    
+    }
+})
+
 const textinfo = document.getElementById("textinfo");
 const urlinfo = document.getElementById("urlinfo");
 const targetinfo = document.getElementById("targetinfo");
@@ -48,6 +60,7 @@ applyBut.addEventListener("click", () => {
     {
         dm.deactivate(dm.active);
         dm.active = 0;
+        dm.removePreview();
     }
     dm.action = "add";
 });
