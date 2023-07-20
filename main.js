@@ -18,13 +18,15 @@ dm.onLoad = () => {
 
 
 document.body.addEventListener("mousemove", (e) => {
-    if (e.target.tagName == "image")
-    {
+    if (e.target.tagName == "image"
+        || e.target.tagName == "rect"
+        || e.target.tagName == "circle"
+        || e.target.tagName == "polygon"
+    ) {
         return;
     }
-    else
-    {   
-        dm.removePreview();    
+    else {
+        dm.removePreview();
     }
 })
 
@@ -56,8 +58,7 @@ delBut.addEventListener("click", () => {
 
 const applyBut = document.getElementById("apply");
 applyBut.addEventListener("click", () => {
-    if (dm.active > 0)
-    {
+    if (dm.active > 0) {
         dm.deactivate(dm.active);
         dm.active = 0;
         dm.removePreview();
@@ -69,8 +70,7 @@ applyBut.addEventListener("click", () => {
 
 const circleBut = document.getElementById("circle");
 circleBut.addEventListener("click", () => {
-    if (dm.active > 0)
-    {
+    if (dm.active > 0) {
         dm.deactivate(dm.active);
         dm.active = 0;
     }
@@ -85,8 +85,7 @@ circleBut.addEventListener("click", () => {
 
 const rectBut = document.getElementById("rect");
 rectBut.addEventListener("click", () => {
-    if (dm.active > 0)
-    {
+    if (dm.active > 0) {
         dm.deactivate(dm.active);
         dm.active = 0;
     }
@@ -100,8 +99,7 @@ rectBut.addEventListener("click", () => {
 
 const polygonBut = document.getElementById("polygon");
 polygonBut.addEventListener("click", () => {
-    if (dm.active > 0)
-    {
+    if (dm.active > 0) {
         dm.deactivate(dm.active);
         dm.active = 0;
     }
@@ -150,6 +148,6 @@ dm.onDeactive = (obj) => {
 dm.onActive = (obj) => {
     textinfo.value = (obj.text) ? obj.text : "";
     urlinfo.value = (obj.url) ? obj.url : "#";
-    targetinfo.value = (obj.target)? obj.target : "---";
+    targetinfo.value = (obj.target) ? obj.target : "---";
 }
 
