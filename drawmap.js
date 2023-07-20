@@ -143,6 +143,31 @@ export function DrawMap(id) {
         }
 
         if (ftype == "polygon") {
+            //cycle shift
+            let n = obj.points.length;
+            let last = n-2;
+            for (let i = 0; i < obj.circles.length; i++) {
+                if (obj.circles[i].getAttribute("class") == "image-mapper-activepoint") {
+                    last = i;
+                    break;
+                }
+            }
+            if (last!=n-2)
+            {
+                let shift = new Array(n);
+                for (let i = 0; i < n-1; i++)
+                {
+                    let j = (i+last+1)%(n-1);
+                    shift[i] = {x:obj.points[j].x, y:obj.points[j].y};
+                }
+                for (let i = 0; i < n-1; i++)
+                {
+                    obj.circles[i].setAttribute("cx", shift[i].x);
+                    obj.circles[i].setAttribute("cy", shift[i].y);
+                    obj.points[i].x = shift[i].x;
+                    obj.points[i].y = shift[i].y;
+                }
+            }
             this.createPolygon(obj);
             //this.action = "add";
         }
@@ -234,7 +259,15 @@ export function DrawMap(id) {
         let p = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
         p.setAttribute("class", "image-mapper-shape selected");
         let n = obj.points.length;
-        let points = [obj.points[n - 1], { x: x, y: y }, obj.points[0]];
+        let start = n-1;
+        for (let i = 0; i < obj.circles.length; i++) {
+            if (obj.circles[i].getAttribute("class") == "image-mapper-activepoint") {
+                start = i;
+                break;
+            }
+        }
+        let stop = (start + 1) % n;    
+        let points = [obj.points[start], { x: x, y: y }, obj.points[stop]];
         for (let e of points) {
             let poi = this.mSVG.createSVGPoint();
             poi.x = e.x;
@@ -300,11 +333,21 @@ export function DrawMap(id) {
     }
 
     this.createPolygon = (obj) => {
-        let n = obj.points.length;
+        //let n = obj.points.length;
+        obj.element.points.clear();
+        for (let e of obj.points)
+        {
+            let poi = this.mSVG.createSVGPoint();    
+            poi.x = e.x;
+            poi.y = e.y;
+            obj.element.points.appendItem(poi);
+        }
+        /*
         let poi = this.mSVG.createSVGPoint();
         poi.x = obj.points[n - 1].x;
         poi.y = obj.points[n - 1].y;
         obj.element.points.appendItem(poi);
+        */
     }
 
 
@@ -604,7 +647,16 @@ g:hover .image-text {
             this.click(this.x, this.y);
         }
     });
-
+    this.mSVG.addEventListener("dblclick", (e) => {
+        if (this.active > 0)
+        {
+            this.deactivate(this.active);
+            this.active = 0;
+            this.removePreview();
+        }
+        this.action = "add";
+    }
+    );
     this.mSVG.addEventListener("mousemove", (e) => {
         if (this.isDrawing) {
             this.move(this.active, this.activepoint, this.scale(e.offsetX) - this.x, this.scale(e.offsetY) - this.y);
